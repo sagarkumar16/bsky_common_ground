@@ -1,0 +1,26 @@
+ipython
+jupyterlab
+loguru
+matplotlib
+mkdocs
+notebook
+numpy
+pandas
+pip
+polars
+pytest
+python-dotenv
+ruff
+scikit-learn
+tqdm
+typer
+-e .
+LCSFinder
+ProcessEntropy
+sentence-transformers
+statsmodels
+scipy
+pyarrow
+bicm
+numba
+langid

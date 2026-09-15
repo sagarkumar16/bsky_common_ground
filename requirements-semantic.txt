@@ -1,0 +1,4 @@
+# Extra dependency for the semantic shared-pack analysis (pack_semantics.py /
+# run_semantic_overlap.py). Kept separate so the base requirements.txt is
+# untouched. Install with:  pip install -r requirements-semantic.txt
+sentence-transformers

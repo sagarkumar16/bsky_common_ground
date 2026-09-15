@@ -1,0 +1,52 @@
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "spcg"
+version = "0.0.1"
+description = "Repository for reproducing the results in the paper 'Finding Common Ground: Graded Communal Knowledge in Bluesky Starter Packs'"
+authors = [
+  { name = "Northeastern University" },
+]
+license = { file = "LICENSE" }
+readme = "README.md"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License"
+]
+requires-python = ">=3.12"
+
+dependencies = [
+    "numpy>=1.23.5",
+    "scipy>=1.15",
+    "pandas>=1.3",
+    "click>=8.1",
+    "pyarrow>=25.0",
+    "tqdm>=2.0",
+    "matplotlib>=3.4",
+    "statsmodels>=0.15",
+    "jupyter>=1.0",
+    "ipython>=8.0",
+    "ruff>=0.0.241",
+    "sentence-transformers",
+    "langid",
+    "bicm",
+    "seaborn",
+    "pygam",
+    "polars"
+]
+
+
+[tool.ruff]
+line-length = 99
+src = ["starterpack_info"]
+include = ["pyproject.toml", "starterpack_info/**/*.py"]
+
+[tool.ruff.lint]
+extend-select = ["I"]  # Add import sorting
+
+[tool.ruff.lint.isort]
+known-first-party = ["starterpack_info"]
+force-sort-within-sections = true
+
