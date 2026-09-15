@@ -1,0 +1,7 @@
+total_starterpacks    : 365,842
+total_nodes           : 2,003,536
+filtered_starterpacks : 106,424
+filtered_nodes        : 1,249,175
+following_edges       : 846,259,154
+posts                 : 311,043,669
+users_with_records    : 283,168

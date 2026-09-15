@@ -1,0 +1,61 @@
+MAX_DF DIAGNOSIS -- what corpus was the CACHED vectorizer fitted on?
+cached pairs: /scratch/xee6vz/study_data/directed/pairs_with_hops_n_eff_seed16.parquet
+census rebuild: per_level=75000 baseline_pairs=150000 max_shared=8 seed=16
+text filters: min_tokens=50 max_posts_per_user=1000 english_only=True
+vectorizer: min_df=10 (int) max_df=0.4 (float) sublinear_tf=True
+
+==============================================================================
+1. WHAT DID THE ORIGINAL VECTORIZER FIT ON?
+==============================================================================
+  census pairs handed to cosine_for_pairs : 750000
+  distinct users in them                  : 501979
+  N_fit  (of those, with usable text)     : 220796   <-- the fit corpus
+  N_scored (users in the cached pairs)    : 136387
+  N_fit - N_scored                        : 84409
+
+==============================================================================
+2. IS THE REBUILT CENSUS THE ONE THAT PRODUCED THE CACHE?
+==============================================================================
+  census pairs scoreable (both endpoints have text) : 212514
+  cached pairs                                      : 212514
+  the two pair SETS are identical                   : True
+
+==============================================================================
+3. THE TWO DOCUMENT-FREQUENCY CEILINGS
+==============================================================================
+  sklearn (float max_df): a term is dropped iff df > max_df * n_docs, where
+  n_docs is the number of documents THE VECTORIZER WAS FITTED ON, and df is
+  counted over those same documents.
+
+  ceil_original = 0.4 * 220796 = 88318.4 docs
+  ceil_rescore  = 0.4 * 136387 = 54554.8 docs
+  ceil_original / N_scored = 0.6476   <-- EFFECTIVE max_df of the cached run,
+                                        expressed over the scored corpus
+
+==============================================================================
+4. RE-SCORING THE CACHED PAIRS FROM EACH CANDIDATE CORPUS
+==============================================================================
+  [verify-refit] max |A(shared-counts) - A(build_user_tfidf)| = 1.832e-15
+                  variant  n_fit_docs  vocab_size  mean_cosine   sim_s0   sim_s1   sim_s4   sim_s8  matched_s1  matched_s8  max_abs_diff_vs_cached  mean_abs_diff_vs_cached
+    A_original_fit_corpus      220796      368113     0.124899 0.027697 0.104031 0.138232 0.151450    0.052807    0.072433                0.000000                 0.000000
+    B_rescore_scored_only      136387      294784     0.118163 0.024894 0.097819 0.131101 0.143620    0.048003    0.066224                0.366794                 0.007140
+C_scored_only_int_ceiling      136387      295057     0.140657 0.037471 0.119882 0.154760 0.168459    0.065965    0.087360                0.363059                 0.015849
+  -> wrote maxdf_diag_variants.csv
+
+  Against the DRAFT (= the cached column) at the stated max_df=0.4:
+    sim_s0      draft 0.028   A 0.02770   B 0.02489   C 0.03747
+    sim_s1      draft 0.104   A 0.10403   B 0.09782   C 0.11988
+    sim_s4      draft 0.138   A 0.13823   B 0.13110   C 0.15476
+    sim_s8      draft 0.151   A 0.15145   B 0.14362   C 0.16846
+    matched_s1  draft 0.053   A 0.05281   B 0.04800   C 0.06597
+    matched_s8  draft 0.072   A 0.07243   B 0.06622   C 0.08736
+
+==============================================================================
+5. VERDICT
+==============================================================================
+  CONFIRMED. Fitting on the ORIGINAL census corpus (220796 docs) and scoring
+  the same 212514 pairs reproduces the cached cosine column to machine
+  precision. The cached numbers are max_df=0.4 OF A 220796-DOCUMENT CORPUS,
+  i.e. an effective ceiling of 88318 documents = 0.6476 of the 136387 users the
+  paper actually scores. The re-scoring path is not broken; it re-fits on
+  a smaller corpus than the pipeline did.

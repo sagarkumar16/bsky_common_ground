@@ -1,0 +1,14 @@
+run_stamp     : 20260903_100910
+started       : 2026-09-03 10:09:10
+slurm_job     : 19242844
+git_commit    : eb430db
+directed      : directed
+starterpacks  : /scratch/xee6vz/bluesky-graph/starterpacks_filtered.jsonl
+packs_tag     : starterpacks_filtered
+data_dir      : /scratch/xee6vz/study_data/starterpacks_filtered
+edgelist      : /scratch/xee6vz/bluesky-graph/filtered_follows_starterpacks_filtered.parquet
+PER_LEVEL=75000 BASELINE_PAIRS=150000 MAX_SHARED=8
+N_EVAL_PAIRS=25000 MIN_TOKENS=50 MAX_POSTS_PER_USER=1000
+MODEL_NAME=all-MiniLM-L6-v2 METHOD=cluster_average MISSING=distinct ENGLISH_ONLY=1
+MAX_HOPS=3 MAX_DEGREE=500000 N_BOOT=500 SEED=26
+NULL: ensemble=canonical statistic=interaction n_rep=200
