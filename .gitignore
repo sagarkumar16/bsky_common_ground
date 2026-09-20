@@ -196,4 +196,4 @@ cython_debug/
 
 # Misc Files
 output/pack_emb_all-MiniLM-L6-v2.npz
-study_data
+study_dataoutput
